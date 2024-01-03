@@ -5,7 +5,15 @@ namespace MyBettingApp.Service
 {
     public class MailService
     {
-        private string startContent = $@"
+        private string startContentAlwaysProfit = @"
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <h2>Bets för garanterad vinst<br/></h2>
+                    </head>
+                    <body>";
+
+        private string startContentBestOdds = $@"
                     <!DOCTYPE html>
                     <html>
                     <head>
@@ -19,7 +27,7 @@ namespace MyBettingApp.Service
 
         public string CreateContentForBestOdds(List<Game> games)
         {
-            string content = startContent;
+            string content = startContentBestOdds;
             foreach (var game in games)
             {
                 content += $"-----------------------------<br/>" +
@@ -36,7 +44,7 @@ namespace MyBettingApp.Service
         public string CreateContentForTopThree(List<Game> games) 
         {
             //string imageLink = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FUEFA_Champions_League&psig=AOvVaw0cLIT23wbFRjpx093D1FPH&ust=1703255188121000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIj12ZreoIMDFQAAAAAdAAAAABAD";
-            string content = startContent;
+            string content = startContentBestOdds;
             foreach (var game in games)
             {
                 content += $"-----------------------------<br/>" +
@@ -63,32 +71,48 @@ namespace MyBettingApp.Service
             return content;
         }
 
-        public string SendResultMail(string content)
+        public string CreateContentForAlwaysProfit(List<OddsModel> winningOdds, double deposit)
         {
-            string toMail = "lovisa.sandgren@gmail.com";
-            //string fromMail = "lovisa.sandgren@gmail.com";
-            //string smpt = "smtp.gmail.com";
-            //int port = 465;
-            //string SmtpUserName = "lovisa.sandgren@gmail.com";
-            //string SmtpPassword = "mkyn dbea svxl bhfj";
+            string content = startContentAlwaysProfit;
+            foreach (var game in winningOdds)
+            {
+                if (game.AwayTeam == null)
+                {
+                    continue;
+                }
+                content += $"Total insats: {deposit} kronor<br/>" +
+                    "-----------------------------<br/>" +
+                    $"<b>{game.HomeTeam} VS {game.AwayTeam}</b>" +
+                    $"<p><b>1. {game.HomeOdds}</b>. Bettingsida: <b>{game.HomeOddsCompany}</b> - Lägg <b>{game.procentHomeTeam}%</b> av din totala insats på detta bett.<br/>" +
+                    $"{Math.Round(((game.procentHomeTeam / 100) * deposit), 2)} kronor<br/>" +
+                    $"Procentuell vinst {Math.Round((((game.procentHomeTeam / 100) * game.HomeOdds) -1),4)}%.</p>" +
+                    $"<p><b>X. {game.DrawOdds}</b>. Bettingsida: <b>{game.DrawOddsCompany}</b> - Lägg <b>{game.procentDraw}%</b> av din totala insats på detta bett.<br/>" +
+                    $"{Math.Round(((game.procentDraw / 100) * deposit),2)} kronor<br/>" +
+                    $"Procentuell vinst {Math.Round((((game.procentDraw / 100) * game.DrawOdds) - 1),4)}%.</p>" +
+                    $"<p><b>2. {game.AwayOdds}</b>. Bettingsida: <b>{game.AwayOddsCompany}</b> - Lägg <b>{game.procentAwayTeam}%</b> av din totala insats på detta bett.<br/>"+
+                    $"{Math.Round(((game.procentAwayTeam / 100) * deposit), 2)} kronor<br/>"+
+                    $"Procentuell vinst {Math.Round((((game.procentAwayTeam / 100) * game.AwayOdds) - 1),4)}%.</p>";
+            }
+
+            content += endContent;
+
+            return content;
+        }
+
+        public string SendResultMail(string content, List<string> mailadresses, string subject)
+        {
+
             try
             {
-                //MailMessage mail = new MailMessage();
-                //mail.To.Add(toMail);
-                //mail.From = new MailAddress(fromMail);
-                //mail.Subject = "Bästa oddsen";
-                //mail.Body = content;
-                //mail.IsBodyHtml = true;
-                //SmtpClient smtp = new SmtpClient(smpt, port);
-                //smtp.UseDefaultCredentials = false;
-                //smtp.Credentials = new System.Net.NetworkCredential(SmtpUserName, SmtpPassword);
-                //smtp.Send(mail);
-
                 MailMessage mail = new MailMessage();
-                mail.To.Add(toMail);
+                
+                foreach (var toMail in mailadresses)
+                {
+                    mail.To.Add(toMail);
+                }
                 //mail.To.Add("john.renstrom13@gmail.com");
                 mail.From = new MailAddress("apirequestlogger@gmail.com");
-                mail.Subject = "Bästa bettingsidorna för Champions League";
+                mail.Subject = subject;
                 mail.Body = content;
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
