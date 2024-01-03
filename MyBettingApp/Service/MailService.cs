@@ -74,14 +74,14 @@ namespace MyBettingApp.Service
         public string CreateContentForAlwaysProfit(List<OddsModel> winningOdds, double deposit)
         {
             string content = startContentAlwaysProfit;
+            content += $"Total insats: {deposit} kronor<br/>";
             foreach (var game in winningOdds)
             {
                 if (game.AwayTeam == null)
                 {
                     continue;
                 }
-                content += $"Total insats: {deposit} kronor<br/>" +
-                    "-----------------------------<br/>" +
+                content += $"-----------------------------<br/>" +
                     $"<b>{game.HomeTeam} VS {game.AwayTeam}</b>" +
                     $"<p><b>1. {game.HomeOdds}</b>. Bettingsida: <b>{game.HomeOddsCompany}</b> - Lägg <b>{game.procentHomeTeam}%</b> av din totala insats på detta bett.<br/>" +
                     $"{Math.Round(((game.procentHomeTeam / 100) * deposit), 2)} kronor<br/>" +
