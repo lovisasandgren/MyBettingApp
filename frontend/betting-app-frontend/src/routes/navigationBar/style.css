@@ -1,0 +1,33 @@
+.navbar {
+    background-color: #32CD32; /* grass green */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-links a {
+    margin-left: 1rem;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.navbar-links a:hover {
+    background-color: #28a428; /* darker grass green */
+    color: #fff;
+}
+
+.main-container {
+    padding: 0px 20px 0px 20px
+}

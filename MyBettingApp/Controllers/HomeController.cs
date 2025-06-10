@@ -12,7 +12,7 @@ namespace MyBettingApp.Controllers
             return View();
         }
         [HttpGet]
-        public void GetAPI()
+        public string GetAPI()
         {
             List<string> mailadresses = new List<string>
             {
@@ -40,7 +40,7 @@ namespace MyBettingApp.Controllers
 
 
 
-
+            return("ok")
         }
 
     }

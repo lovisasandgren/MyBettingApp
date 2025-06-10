@@ -1,0 +1,42 @@
+[
+  {
+    "key": "soccer_sweden_allsvenskan",
+    "group": "Soccer",
+    "title": "Allsvenskan - Sweden",
+    "description": "Swedish Soccer",
+    "active": true,
+    "has_outrights": false
+  },
+  {
+    "key": "soccer_fifa_world_cup_womens",
+    "group": "Soccer",
+    "title": "FIFA Women's World Cup",
+    "description": "FIFA Women's World Cup",
+    "active": false,
+    "has_outrights": false
+  },
+  {
+    "key": "soccer_sweden_superettan",
+    "group": "Soccer",
+    "title": "Superettan - Sweden",
+    "description": "Swedish Soccer",
+    "active": true,
+    "has_outrights": false
+  },
+  {
+    "key": "soccer_uefa_champs_league_women",
+    "group": "Soccer",
+    "title": "UEFA Champions League Women",
+    "description": "European Champions League Women",
+    "active": false,
+    "has_outrights": false
+  },
+  {
+    "key": "soccer_uefa_champs_league",
+    "group": "Soccer",
+    "title": "UEFA Champions League",
+    "description": "European Champions League",
+    "active": false,
+    "has_outrights": false
+  }
+]
