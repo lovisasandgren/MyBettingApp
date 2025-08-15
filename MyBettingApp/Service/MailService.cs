@@ -5,7 +5,13 @@ namespace MyBettingApp.Service
 {
     public class MailService
     {
-        private string startContentAlwaysProfit = @"
+		private readonly IConfiguration _config;
+
+		public MailService(IConfiguration config)
+		{
+			_config = config;
+		}
+		private string startContentAlwaysProfit = @"
                     <!DOCTYPE html>
                     <html>
                     <head>
@@ -99,18 +105,19 @@ namespace MyBettingApp.Service
             return content;
         }
 
-        public string SendResultMail(string content, List<string> mailadresses, string subject)
+        public string SendResultMail(string content, string subject)
         {
 
             try
             {
-                MailMessage mail = new MailMessage();
+				var mailAddresses = _config.GetSection("EmailList").Get<List<string>>();
+
+				MailMessage mail = new MailMessage();
                 
-                foreach (var toMail in mailadresses)
+                foreach (var toMail in mailAddresses)
                 {
                     mail.To.Add(toMail);
                 }
-                //mail.To.Add("john.renstrom13@gmail.com");
                 mail.From = new MailAddress("apirequestlogger@gmail.com");
                 mail.Subject = subject;
                 mail.Body = content;

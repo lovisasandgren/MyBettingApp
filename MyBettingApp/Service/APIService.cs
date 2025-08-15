@@ -9,7 +9,7 @@ namespace MyBettingApp.Service
     public class APIService
     {
         private readonly string _apiKey = "d822d85bcaed6d120011ed888768e26b";
-        private readonly string _url = "https://api.the-odds-api.com/v4/sports/soccer_uefa_champs_league/odds/?apiKey=d822d85bcaed6d120011ed888768e26b&regions=eu&markets=h2h";
+        private readonly string _url = "https://api.the-odds-api.com/v4/sports/soccer_epl/odds/?apiKey=d822d85bcaed6d120011ed888768e26b&regions=eu&markets=h2h";
         public List<Game> games = new();
         
         public async Task<List<GameModel.Match>> GetMatchInfo()

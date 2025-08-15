@@ -38,5 +38,14 @@
     "description": "European Champions League",
     "active": false,
     "has_outrights": false
+  },
+  {
+    "key": "soccer_epl",
+    "group": "Soccer",
+    "title": "EPL",
+    "description": "English Premier League",
+    "active": true,
+    "has_outrights": false
   }
+
 ]
