@@ -3,8 +3,8 @@ using System.Net.Mail;
 
 namespace MyBettingApp.Service
 {
-    public class MailService
-    {
+	public class MailService
+	{
 		private readonly IConfiguration _config;
 
 		public MailService(IConfiguration config)
@@ -19,7 +19,7 @@ namespace MyBettingApp.Service
                     </head>
                     <body>";
 
-        private string startContentBestOdds = $@"
+		private string startContentBestOdds = $@"
                     <!DOCTYPE html>
                     <html>
                     <head>
@@ -27,114 +27,146 @@ namespace MyBettingApp.Service
                     </head>
                     <body>";
 
-        private string endContent = "<p>-------------------</p>" +
-            "</body>\r\n                    </html>";
+		private string endContent = "<p>-------------------</p>" +
+			"</body>\r\n                    </html>";
 
 
-        public string CreateContentForBestOdds(List<Game> games)
-        {
-            string content = startContentBestOdds;
-            foreach (var game in games)
-            {
-                content += $"-----------------------------<br/>" +
-                    $"<b>{game.HomeTeam} VS {game.AwayTeam}</b>" +
-                    $"<p>Bäst odds för hemmalaget: {game.HomeTeam} - <b>{game.BettingCompanyHomeOdds}</b>, odds: <b>{game.BestHomeTeamOdds}</b></p>" +
-                    $"<p>Bäst odds för bortalaget: {game.AwayTeam} - <b>{game.BettingCompanyAwayOdds}</b>, odds: <b>{game.BestAwayTeamOdds}</b></p>" +
-                    $"<p>Bäst odds för lika - <b>{game.BettingCompanyDrawOdds} </b>, odds: <b>{game.BestDrawOdds}</b></p>";
-            }
+		public string CreateContentForBestOdds(List<Game> games)
+		{
+			string content = startContentBestOdds;
+			foreach (var game in games)
+			{
+				content += $"-----------------------------<br/>" +
+					$"<b>{game.HomeTeam} VS {game.AwayTeam}</b>" +
+					$"<p>Bäst odds för hemmalaget: {game.HomeTeam} - <b>{game.BettingCompanyHomeOdds}</b>, odds: <b>{game.BestHomeTeamOdds}</b></p>" +
+					$"<p>Bäst odds för bortalaget: {game.AwayTeam} - <b>{game.BettingCompanyAwayOdds}</b>, odds: <b>{game.BestAwayTeamOdds}</b></p>" +
+					$"<p>Bäst odds för lika - <b>{game.BettingCompanyDrawOdds} </b>, odds: <b>{game.BestDrawOdds}</b></p>";
+			}
 
-            content += endContent;
+			content += endContent;
 
-            return content;
-        }
-        public string CreateContentForTopThree(List<Game> games) 
-        {
-            //string imageLink = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FUEFA_Champions_League&psig=AOvVaw0cLIT23wbFRjpx093D1FPH&ust=1703255188121000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIj12ZreoIMDFQAAAAAdAAAAABAD";
-            string content = startContentBestOdds;
-            foreach (var game in games)
-            {
-                content += $"-----------------------------<br/>" +
-                    $"<h3><b>{game.HomeTeam} VS {game.AwayTeam}</b></h3>" +
-                    $"<h4><u><b>Topp tre odds för hemmalaget {game.HomeTeam}</b></u></h4>" +
-                    $"<p>1. <b>{game.BettingCompanyHomeOdds}</b>, odds: <b>{game.BestHomeTeamOdds}</b></p>" +
-                    $"<p>2. <b>{game.BettingCompanyHomeTop2Odds}</b>, odds: <b>{game.Top2HomeTeamOdds}</b></p>" +
-                    $"<p>3. <b>{game.BettingCompanyHomeTop3Odds}</b>, odds: <b>{game.Top3HomeTeamOdds}</b></p>" +
-                    $"<p>Lägsta oddset: <b>{game.BettingCompanyHomeLowestOdds}</b>, odds: <b>{game.LowestHomeTeamOdds}</b></p>" +
-                    $"<h4><u><b>Topp tre odds för bortalaget {game.AwayTeam}</b></u></h4>" +
-                    $"<p>1. <b>{game.BettingCompanyAwayOdds}</b>, odds: <b>{game.BestAwayTeamOdds}</b></p>" +
-                    $"<p>2. <b>{game.BettingCompanyAwayTop2Odds}</b>, odds: <b>{game.Top2AwayTeamOdds}</b></p>" +
-                    $"<p>3. <b>{game.BettingCompanyAwayTop3Odds}</b>, odds: <b>{game.Top3AwayTeamOdds}</b></p>" +
-                    $"<p>Lägsta oddset: <b>{game.BettingCompanyAwayLowestOdds}</b>, odds: <b>{game.LowestAwayTeamOdds}</b></p>" +
-                    $"<h4><u><b>Topp tre odds för lika</b></u></h4>" +
-                    $"<p>1. <b>{game.BettingCompanyDrawOdds}</b>, odds: <b>{game.BestDrawOdds}</b></p>"+
-                    $"<p>2. <b>{game.BettingCompanyDrawTop2Odds}</b>, odds: <b>{game.Top2DrawOdds}</b></p>" +
-                    $"<p>3. <b>{game.BettingCompanyDrawTop3Odds}</b>, odds: <b>{game.Top3DrawOdds}</b></p>"+
-                    $"<p>Lägsta oddset: <b>{game.BettingCompanyDrawLowestOdds}</b>, odds: <b>{game.LowestDrawOdds}</b></p>";
-            }
+			return content;
+		}
+		public string CreateContentForTopThree(List<Game> games)
+		{
+			string content = startContentBestOdds;
 
-            content += endContent;
+			foreach (var game in games)
+			{
+				content += $@"
+            <div style='border:1px solid #ddd; border-radius:8px; padding:15px; margin-bottom:20px; font-family:Arial, sans-serif;'>
+                <h2 style='margin-top:0; background:#f4f4f4; padding:10px; border-radius:6px;'>{game.HomeTeam} VS {game.AwayTeam}</h2>
+                
+                <h3 style='color:#2c3e50;'>Topp tre odds – {game.HomeTeam}</h3>
+                <table style='width:100%; border-collapse:collapse; margin-bottom:15px;'>
+                    <tr><th>Plats</th><th>Spelbolag</th><th>Odds</th></tr>
+                    <tr><td>1</td><td>{game.BettingCompanyHomeOdds}</td><td><b>{game.BestHomeTeamOdds}</b></td></tr>
+                    <tr><td>2</td><td>{game.BettingCompanyHomeTop2Odds}</td><td>{game.Top2HomeTeamOdds}</td></tr>
+                    <tr><td>3</td><td>{game.BettingCompanyHomeTop3Odds}</td><td>{game.Top3HomeTeamOdds}</td></tr>
+                    <tr style='background:#f9f9f9;'><td colspan='2'>Lägsta oddset</td><td>{game.LowestHomeTeamOdds} ({game.BettingCompanyHomeLowestOdds})</td></tr>
+                </table>
 
-            return content;
-        }
+                <h3 style='color:#2c3e50;'>Topp tre odds – {game.AwayTeam}</h3>
+                <table style='width:100%; border-collapse:collapse; margin-bottom:15px;'>
+                    <tr><th>Plats</th><th>Spelbolag</th><th>Odds</th></tr>
+                    <tr><td>1</td><td>{game.BettingCompanyAwayOdds}</td><td><b>{game.BestAwayTeamOdds}</b></td></tr>
+                    <tr><td>2</td><td>{game.BettingCompanyAwayTop2Odds}</td><td>{game.Top2AwayTeamOdds}</td></tr>
+                    <tr><td>3</td><td>{game.BettingCompanyAwayTop3Odds}</td><td>{game.Top3AwayTeamOdds}</td></tr>
+                    <tr style='background:#f9f9f9;'><td colspan='2'>Lägsta oddset</td><td>{game.LowestAwayTeamOdds} ({game.BettingCompanyAwayLowestOdds})</td></tr>
+                </table>
 
-        public string CreateContentForAlwaysProfit(List<OddsModel> winningOdds, double deposit)
-        {
-            string content = startContentAlwaysProfit;
-            content += $"Total insats: {deposit} kronor<br/>";
-            foreach (var game in winningOdds)
-            {
-                if (game.AwayTeam == null)
-                {
-                    continue;
-                }
-                content += $"-----------------------------<br/>" +
-                    $"<b>{game.HomeTeam} VS {game.AwayTeam}</b>" +
-                    $"<p><b>1. {game.HomeOdds}</b>. Bettingsida: <b>{game.HomeOddsCompany}</b> - Lägg <b>{game.procentHomeTeam}%</b> av din totala insats på detta bett.<br/>" +
-                    $"{Math.Round(((game.procentHomeTeam / 100) * deposit), 2)} kronor<br/>" +
-                    $"Procentuell vinst {Math.Round((((game.procentHomeTeam / 100) * game.HomeOdds) -1),4)}%.</p>" +
-                    $"<p><b>X. {game.DrawOdds}</b>. Bettingsida: <b>{game.DrawOddsCompany}</b> - Lägg <b>{game.procentDraw}%</b> av din totala insats på detta bett.<br/>" +
-                    $"{Math.Round(((game.procentDraw / 100) * deposit),2)} kronor<br/>" +
-                    $"Procentuell vinst {Math.Round((((game.procentDraw / 100) * game.DrawOdds) - 1),4)}%.</p>" +
-                    $"<p><b>2. {game.AwayOdds}</b>. Bettingsida: <b>{game.AwayOddsCompany}</b> - Lägg <b>{game.procentAwayTeam}%</b> av din totala insats på detta bett.<br/>"+
-                    $"{Math.Round(((game.procentAwayTeam / 100) * deposit), 2)} kronor<br/>"+
-                    $"Procentuell vinst {Math.Round((((game.procentAwayTeam / 100) * game.AwayOdds) - 1),4)}%.</p>";
-            }
+                <h3 style='color:#2c3e50;'>Topp tre odds – Oavgjort</h3>
+                <table style='width:100%; border-collapse:collapse;'>
+                    <tr><th>Plats</th><th>Spelbolag</th><th>Odds</th></tr>
+                    <tr><td>1</td><td>{game.BettingCompanyDrawOdds}</td><td><b>{game.BestDrawOdds}</b></td></tr>
+                    <tr><td>2</td><td>{game.BettingCompanyDrawTop2Odds}</td><td>{game.Top2DrawOdds}</td></tr>
+                    <tr><td>3</td><td>{game.BettingCompanyDrawTop3Odds}</td><td>{game.Top3DrawOdds}</td></tr>
+                    <tr style='background:#f9f9f9;'><td colspan='2'>Lägsta oddset</td><td>{game.LowestDrawOdds} ({game.BettingCompanyDrawLowestOdds})</td></tr>
+                </table>
+            </div>";
+			}
 
-            content += endContent;
+			content += endContent;
+			return content;
+		}
 
-            return content;
-        }
 
-        public string SendResultMail(string content, string subject)
-        {
+		public string CreateContentForAlwaysProfit(List<OddsModel> winningOdds, double deposit)
+		{
+			string content = startContentAlwaysProfit;
+			content += $"<p><b>Total insats:</b> {deposit} kronor</p>";
 
-            try
-            {
+			foreach (var game in winningOdds)
+			{
+				if (game.AwayTeam == null)
+					continue;
+
+				content += $@"
+            <div style='border:1px solid #ddd; border-radius:8px; padding:15px; margin-bottom:20px; font-family:Arial, sans-serif;'>
+                <h2 style='margin-top:0; background:#f4f4f4; padding:10px; border-radius:6px;'>{game.HomeTeam} VS {game.AwayTeam}</h2>
+                
+                <table style='width:100%; border-collapse:collapse; margin-bottom:15px;'>
+                    <tr style='background:#e0f7fa;'><th>Bett</th><th>Bettingsida</th><th>Procent av insats</th><th>Belopp (kr)</th><th>Procentuell vinst</th></tr>
+                    <tr>
+                        <td><b>1. {game.HomeOdds}</b></td>
+                        <td>{game.HomeOddsCompany}</td>
+                        <td>{game.procentHomeTeam}%</td>
+                        <td>{Math.Round(((game.procentHomeTeam / 100) * deposit), 2)}</td>
+                        <td><b>{Math.Round((((game.procentHomeTeam / 100) * game.HomeOdds) - 1) * 100, 2)}%</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>X. {game.DrawOdds}</b></td>
+                        <td>{game.DrawOddsCompany}</td>
+                        <td>{game.procentDraw}%</td>
+                        <td>{Math.Round(((game.procentDraw / 100) * deposit), 2)}</td>
+                        <td><b>{Math.Round((((game.procentDraw / 100) * game.DrawOdds) - 1) * 100, 2)}%</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>2. {game.AwayOdds}</b></td>
+                        <td>{game.AwayOddsCompany}</td>
+                        <td>{game.procentAwayTeam}%</td>
+                        <td>{Math.Round(((game.procentAwayTeam / 100) * deposit), 2)}</td>
+                        <td><b>{Math.Round((((game.procentAwayTeam / 100) * game.AwayOdds) - 1) * 100, 2)}%</b></td>
+                    </tr>
+                </table>
+            </div>";
+			}
+
+			content += endContent;
+			return content;
+		}
+
+
+		public string SendResultMail(string content, string subject)
+		{
+
+			try
+			{
 				var mailAddresses = _config.GetSection("EmailList").Get<List<string>>();
 
 				MailMessage mail = new MailMessage();
-                
-                foreach (var toMail in mailAddresses)
-                {
-                    mail.To.Add(toMail);
-                }
-                mail.From = new MailAddress("apirequestlogger@gmail.com");
-                mail.Subject = subject;
-                mail.Body = content;
-                mail.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-                smtp.EnableSsl = true;
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new System.Net.NetworkCredential("apirequestlogger@gmail.com", "aeoa jjox kvce qxnd");
-                smtp.Send(mail);
 
-                return "success";
-            }
-            catch (Exception ex)
-            {
-                return $"failed, errormsg: {ex}";
-            }
-        }
+				foreach (var toMail in mailAddresses)
+				{
+					mail.To.Add(toMail);
+				}
+				mail.From = new MailAddress("apirequestlogger@gmail.com");
+				mail.Subject = subject;
+				mail.Body = content;
+				mail.IsBodyHtml = true;
+				SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+				smtp.EnableSsl = true;
+				smtp.UseDefaultCredentials = false;
+				smtp.Credentials = new System.Net.NetworkCredential("apirequestlogger@gmail.com", "aeoa jjox kvce qxnd");
+				smtp.Send(mail);
 
-    }
+				return "success";
+			}
+			catch (Exception ex)
+			{
+				return $"failed, errormsg: {ex}";
+			}
+		}
+
+	}
 }
