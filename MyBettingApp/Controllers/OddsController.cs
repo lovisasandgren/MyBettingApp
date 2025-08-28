@@ -27,13 +27,13 @@ namespace MyBettingApp.Controllers
 		}
 
 		[HttpGet("SendAlwaysProfil")]
-		public string SendAlwaysProfil()
+		public async Task<string> SendAlwaysProfil()
 		{
 			_logger.LogInformation("SendAlwaysProfil called at {Time}", DateTime.UtcNow);
 
 			try
 			{
-				List<GameModel.Match> matches = _apiService.GetMatchInfo().Result;
+				List<GameModel.Match> matches = await _apiService.GetMatchInfo();
 				List<OddsModel> oddsList = _compareOdds.CheckForAlwaysProfit(matches);
 				string contentAlwaysProfit = _mailService.CreateContentForAlwaysProfit(oddsList, 200.0);
 				_mailService.SendResultMail(contentAlwaysProfit, "Garanterad vinst");
@@ -49,7 +49,7 @@ namespace MyBettingApp.Controllers
 		}
 
 		[HttpGet("SendOddsForTopThree")]
-		public string SendOddsForTopThree()
+		public async Task<string> SendOddsForTopThree()
 		{
 			_logger.LogInformation("SendOddsForTopThree called at {Time}", DateTime.UtcNow);
 
