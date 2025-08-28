@@ -1,4 +1,5 @@
-﻿using MyBettingApp.Models;
+﻿using Microsoft.Extensions.Logging;
+using MyBettingApp.Models;
 using System.Net.Mail;
 
 namespace MyBettingApp.Service
@@ -6,10 +7,13 @@ namespace MyBettingApp.Service
 	public class MailService
 	{
 		private readonly IConfiguration _config;
+		private readonly ILogger<MailService> _logger;
 
-		public MailService(IConfiguration config)
+		public MailService(IConfiguration config, ILogger<MailService> logger)
 		{
 			_config = config;
+			_logger = logger;
+
 		}
 		private string startContentAlwaysProfit = @"
                     <!DOCTYPE html>
@@ -139,6 +143,7 @@ namespace MyBettingApp.Service
 
 		public string SendResultMail(string content, string subject)
 		{
+			_logger.LogInformation("SendResultMail called with subject '{Subject}' at {Time}", subject, DateTime.UtcNow);
 
 			try
 			{
@@ -150,21 +155,28 @@ namespace MyBettingApp.Service
 				{
 					mail.To.Add(toMail);
 				}
+
 				mail.From = new MailAddress("apirequestlogger@gmail.com");
 				mail.Subject = subject;
 				mail.Body = content;
 				mail.IsBodyHtml = true;
-				SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-				smtp.EnableSsl = true;
-				smtp.UseDefaultCredentials = false;
-				smtp.Credentials = new System.Net.NetworkCredential("apirequestlogger@gmail.com", "aeoa jjox kvce qxnd");
+
+				SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)
+				{
+					EnableSsl = true,
+					UseDefaultCredentials = false,
+					Credentials = new System.Net.NetworkCredential("apirequestlogger@gmail.com", "aeoa jjox kvce qxnd")
+				};
+
 				smtp.Send(mail);
 
+				_logger.LogInformation("SendResultMail successfully sent subject '{Subject}' at {Time}", subject, DateTime.UtcNow);
 				return "success";
 			}
 			catch (Exception ex)
 			{
-				return $"failed, errormsg: {ex}";
+				_logger.LogError(ex, "SendResultMail failed with subject '{Subject}' at {Time}", subject, DateTime.UtcNow);
+				return $"failed, errormsg: {ex.Message}";
 			}
 		}
 
