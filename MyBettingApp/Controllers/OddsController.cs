@@ -10,7 +10,7 @@ namespace MyBettingApp.Controllers
 	[Route("api/[Controller]")]
 	public class OddsController : Controller
 	{
-		private readonly APIService _apiService = new APIService();
+		private readonly APIService _apiService = new APIService(new LoggerFactory().CreateLogger<APIService>());
 		private readonly CompareOdds _compareOdds = new CompareOdds();
 
 		private readonly MailService _mailService = new MailService(
