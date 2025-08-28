@@ -12,8 +12,10 @@ namespace MyBettingApp.Controllers
 	{
 		private readonly APIService _apiService = new APIService();
 		private readonly CompareOdds _compareOdds = new CompareOdds();
+
 		private readonly MailService _mailService = new MailService(
 			new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()
+			, new LoggerFactory().CreateLogger<MailService>()
 		);
 
 		private readonly ILogger<OddsController> _logger;
